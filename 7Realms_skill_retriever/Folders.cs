@@ -17,7 +17,7 @@
 
         internal static void EmptyOutputFolder(string outputDirectory) 
         {
-            DirectoryInfo outputInfo = new DirectoryInfo(outputDirectory);
+            var outputInfo = new DirectoryInfo(outputDirectory);
 
             foreach (FileInfo file in outputInfo.GetFiles())
             {

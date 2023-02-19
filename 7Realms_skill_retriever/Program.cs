@@ -5,18 +5,33 @@ namespace _7Realms_skill_retriever
     {
         static void Main()
         {
-            var currentDirectory = Directory.GetCurrentDirectory();
+            try
+            {
+                var currentDirectory = Directory.GetCurrentDirectory();
 
-            var mainDirectory = Path.GetFullPath(Path.Combine(currentDirectory, @"..\..\..\"));
+                var mainDirectory = Path.GetFullPath(Path.Combine(currentDirectory, @"..\..\..\..\"));
 
-            var inputDirectory = mainDirectory + "\\Input";
-            var outputDirectory = mainDirectory + "\\Output";
+                var inputDirectory = mainDirectory + "Input";
+                var outputDirectory = mainDirectory + "Output";
 
-            Folders.CreateFoldersIfNotExist(inputDirectory, outputDirectory);
+                Folders.CreateFoldersIfNotExist(inputDirectory, outputDirectory);
 
-            Folders.EmptyOutputFolder(outputDirectory);
+                Folders.EmptyOutputFolder(outputDirectory);
 
-            Tekst.DisplayStartInstructions(inputDirectory);
+                Tekst.DisplayStartInstructions(inputDirectory);
+
+                var dataReader = new DataReader(inputDirectory);
+
+                var gegevens = dataReader.ReadData();
+
+                Tekst.DisplayResultaten(gegevens);
+
+                Tekst.Afsluiting();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }

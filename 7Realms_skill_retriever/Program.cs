@@ -8,7 +8,11 @@
             {
                 var currentDirectory = Directory.GetCurrentDirectory();
 
-                var mainDirectory = Path.GetFullPath(Path.Combine(currentDirectory, @"..\..\..\..\"));
+                //use for debug
+                //var mainDirectory = Path.GetFullPath(Path.Combine(currentDirectory, @"..\..\..\..\"));
+
+                //use for release
+                var mainDirectory = currentDirectory;
 
                 var inputDirectory = mainDirectory + "Input";
                 var outputDirectory = mainDirectory + "Output";

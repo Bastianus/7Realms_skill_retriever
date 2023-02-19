@@ -6,7 +6,12 @@
     <RootNamespace>_7Realms_skill_retriever</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>7realms_icon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="7realms_icon.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="IronXL.Excel" Version="2023.1.14" />

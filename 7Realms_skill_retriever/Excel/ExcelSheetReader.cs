@@ -1,4 +1,4 @@
-﻿using IronXL;
+﻿using OfficeOpenXml;
 
 namespace _7Realms_skill_retriever.Excel
 {
@@ -6,9 +6,11 @@ namespace _7Realms_skill_retriever.Excel
     {
         public static ExcelGegevens ReadDataFromExcelFile(string fullname)
         {
-            var workbook = WorkBook.Load(fullname);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            var firstSheet = workbook.DefaultWorkSheet;
+            var workbook = new ExcelPackage(new FileInfo(fullname));
+
+            var firstSheet = workbook.Workbook.Worksheets[0];
 
             return new ExcelGegevens(firstSheet);
         }

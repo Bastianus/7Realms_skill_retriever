@@ -7,6 +7,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <ApplicationIcon>7realms_icon.ico</ApplicationIcon>
+	<PublishSingleFile>true</PublishSingleFile>
+	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<PublishReadyToRun>true</PublishReadyToRun>
+	<StartupObject>_7Realms_skill_retriever.Program</StartupObject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IronXL.Excel" Version="2023.1.14" />
+    <PackageReference Include="EPPlus" Version="6.1.2" />
   </ItemGroup>
 
 </Project>

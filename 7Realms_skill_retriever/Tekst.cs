@@ -20,7 +20,11 @@ namespace _7Realms_skill_retriever
 
         internal static void DisplayResultaten(List<ExcelGegevens> gegevens)
         {
+            Console.Clear();
+
             Console.WriteLine("De volgende spelers met hun karakters waren geselecteerd:");
+
+            Console.WriteLine();
 
             var uniekeVaardigheden = new List<VaardigheidMetAantal>();
 
@@ -52,12 +56,17 @@ namespace _7Realms_skill_retriever
 
             Console.WriteLine();
             Console.WriteLine("Deze vaardigheden zijn gevonden:");
+
+            int longestNameLength = 0;
+            geordend.Select(g => g.Naam).ToList().ForEach(n => longestNameLength = n.Length > longestNameLength ? n.Length : longestNameLength);
+
+
             geordend.ForEach(v =>
             {
                 var karakters = new StringBuilder();
                 karakters.AppendJoin(", ", v.Karakters.OrderBy(k => k));
 
-                Console.WriteLine($"{v.Naam}, niveau: {v.Niveau}, aantal:{v.Aantal}. Spelers: {karakters}");
+                Console.WriteLine($"{v.Naam} {new string(' ', longestNameLength - v.Naam.Length)}, niveau: {v.Niveau}, aantal:{v.Aantal}. Spelers: {karakters}");
             });
         }
 

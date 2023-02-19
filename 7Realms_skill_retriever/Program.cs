@@ -6,20 +6,11 @@
         {
             try
             {
-                var currentDirectory = Directory.GetCurrentDirectory();
+                var mainDirectory = Directory.GetCurrentDirectory();
 
-                //use for debug
-                //var mainDirectory = Path.GetFullPath(Path.Combine(currentDirectory, @"..\..\..\..\"));
+                var inputDirectory = mainDirectory + "\\Input";
 
-                //use for release
-                var mainDirectory = currentDirectory;
-
-                var inputDirectory = mainDirectory + "Input";
-                var outputDirectory = mainDirectory + "Output";
-
-                Folders.CreateFoldersIfNotExist(inputDirectory, outputDirectory);
-
-                Folders.EmptyOutputFolder(outputDirectory);
+                Folders.CreateFoldersIfNotExist(inputDirectory);
 
                 Tekst.DisplayStartInstructions(inputDirectory);
 
@@ -32,6 +23,7 @@
             catch(Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                Console.ReadKey();
             }
         }
     }

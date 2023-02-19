@@ -1,21 +1,21 @@
 ﻿using _7Realms_skill_retriever.Data;
-using IronXL;
+using OfficeOpenXml;
 
 namespace _7Realms_skill_retriever.Excel
 {
     internal class ExcelGegevens
     {
-        private WorkSheet _sheet;
+        private ExcelWorksheet _sheet;
         public string SpelerNaam { get;}
         public string KarakterNaam { get; }
         public List<Vaardigheid> Vaardigheden { get; private set; } = null!;
 
-        public ExcelGegevens(WorkSheet worksheet)
+        public ExcelGegevens(ExcelWorksheet worksheet)
         {
             _sheet= worksheet;
 
-            SpelerNaam = _sheet["C3"].StringValue;
-            KarakterNaam = _sheet["C2"].StringValue;
+            SpelerNaam = _sheet.Cells["C3"].Text;
+            KarakterNaam = _sheet.Cells["C2"].Text;
 
             VulVaardigheden();
         }
@@ -30,24 +30,24 @@ namespace _7Realms_skill_retriever.Excel
 
             void VulVaardighedenLichaam()
             {
-                var vaardighedenNaam = _sheet.GetColumn(1).Skip(25).Take(9).Select(x => x.StringValue).ToList();
-                var vaardighedenNiveau = _sheet.GetColumn(2).Skip(25).Take(9).Select(x => x.Int32Value).ToList();
+                var vaardighedenNaam = _sheet.Cells["B26:B34"].Select(x => x.Text).ToList();
+                var vaardighedenNiveau = _sheet.Cells["C26:C34"].Select(x => Int32.Parse(string.IsNullOrEmpty(x.Text) ? "0" : x.Text)).ToList();
 
                 VulDeVaardigheden(vaardighedenNaam, vaardighedenNiveau);
             }
 
             void VulVaardighedenZiel()
             {
-                var vaardighedenNaam = _sheet.GetColumn(5).Skip(25).Take(5).Select(x => x.StringValue).ToList();
-                var vaardighedenNiveau = _sheet.GetColumn(6).Skip(25).Take(5).Select(x => x.Int32Value).ToList();
+                var vaardighedenNaam = _sheet.Cells["F26:F30"].Select(x => x.Text).ToList();
+                var vaardighedenNiveau = _sheet.Cells["G26:G30"].Select(x => Int32.Parse(string.IsNullOrEmpty(x.Text) ? "0" : x.Text)).ToList();
 
                 VulDeVaardigheden(vaardighedenNaam, vaardighedenNiveau);
             }
 
             void VulVaardighedenGeest()
             {
-                var vaardighedenNaam = _sheet.GetColumn(9).Skip(25).Take(9).Select(x => x.StringValue).ToList();
-                var vaardighedenNiveau = _sheet.GetColumn(10).Skip(25).Take(9).Select(x => x.Int32Value).ToList();
+                var vaardighedenNaam = _sheet.Cells["J26:J34"].Select(x => x.Text).ToList();
+                var vaardighedenNiveau = _sheet.Cells["K26:K34"].Select(x => Int32.Parse(string.IsNullOrEmpty(x.Text) ? "0" : x.Text)).ToList();
 
                 VulDeVaardigheden(vaardighedenNaam, vaardighedenNiveau);
             }

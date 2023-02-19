@@ -1,5 +1,4 @@
-﻿using _7Realms_skill_retriever;
-namespace _7Realms_skill_retriever
+﻿namespace _7Realms_skill_retriever
 {
     public class Program 
     {
@@ -20,9 +19,7 @@ namespace _7Realms_skill_retriever
 
                 Tekst.DisplayStartInstructions(inputDirectory);
 
-                var dataReader = new DataReader(inputDirectory);
-
-                var gegevens = dataReader.ReadData();
+                var gegevens = new DataReader(inputDirectory).ReadData();
 
                 Tekst.DisplayResultaten(gegevens);
 

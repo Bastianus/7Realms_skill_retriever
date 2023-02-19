@@ -1,5 +1,6 @@
 ﻿using _7Realms_skill_retriever.Data;
 using _7Realms_skill_retriever.Excel;
+using System.Text;
 
 namespace _7Realms_skill_retriever
 {
@@ -21,35 +22,42 @@ namespace _7Realms_skill_retriever
         {
             Console.WriteLine("De volgende spelers met hun karakters waren geselecteerd:");
 
-            var vaardigheden = new List<Vaardigheid>();
+            var uniekeVaardigheden = new List<VaardigheidMetAantal>();
 
             foreach (var karakter in gegevens)
             {
                 Console.WriteLine($"Speler naam: {karakter.SpelerNaam}. Karakter naam: {karakter.KarakterNaam}");
 
-                vaardigheden.AddRange(karakter.Vaardigheden);
+                VoegVaardighedenToe();
+
+                void VoegVaardighedenToe()
+                {
+                    karakter.Vaardigheden.ForEach(kv =>
+                    {
+                        if (!uniekeVaardigheden.Any(uv => uv.Naam == kv.Naam && uv.Niveau == kv.Niveau))
+                        {
+                            uniekeVaardigheden.Add(new VaardigheidMetAantal(kv.Naam, kv.Niveau, 1, karakter.KarakterNaam));
+                        }
+                        else
+                        {
+                            uniekeVaardigheden.Single(x => x.Naam == kv.Naam && x.Niveau == kv.Niveau)
+                                .HoogAantalOp()
+                                .VoegKarakterToe(karakter.KarakterNaam);
+                        }
+                    });
+                }
             }
-            var uniekeVaardigheden = new List<VaardigheidMetAantal>();
-
-            vaardigheden.ForEach(vaardigheid =>
-            {
-                if (!uniekeVaardigheden.Any(x => x.Naam == vaardigheid.Naam && x.Niveau == vaardigheid.Niveau))
-                {
-                    uniekeVaardigheden.Add(new VaardigheidMetAantal(vaardigheid.Naam, vaardigheid.Niveau, 1));
-                }
-                else
-                {
-                    uniekeVaardigheden.Single(x => x.Naam == vaardigheid.Naam && x.Niveau == vaardigheid.Niveau).HoogAantalOp();
-                }
-            });
-
+           
             var geordend = uniekeVaardigheden.OrderBy(x => x.Naam).ThenBy(x => x.Niveau).ToList();
 
             Console.WriteLine();
             Console.WriteLine("Deze vaardigheden zijn gevonden:");
             geordend.ForEach(v =>
             {
-                Console.WriteLine($"{v.Naam}, niveau: {v.Niveau}, aantal:{v.Aantal}.");
+                var karakters = new StringBuilder();
+                karakters.AppendJoin(", ", v.Karakters.OrderBy(k => k));
+
+                Console.WriteLine($"{v.Naam}, niveau: {v.Niveau}, aantal:{v.Aantal}. Spelers: {karakters}");
             });
         }
 

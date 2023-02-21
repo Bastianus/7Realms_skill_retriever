@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "7Realms_skill_retriever": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

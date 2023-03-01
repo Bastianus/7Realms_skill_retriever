@@ -26,6 +26,8 @@ namespace _7Realms_skill_retriever
 
             DisplayVaardigheden(gegevens);
 
+            DisplayMutaties(gegevens);
+
             DisplayAmbachten(gegevens);
         }
 
@@ -87,19 +89,60 @@ namespace _7Realms_skill_retriever
             });
         }
 
+        private static void DisplayMutaties(List<ExcelGegevens> gegevens)
+        {
+            var uniekeMutaties = new List<MutatiesMetAantal>();
+
+            foreach (var karakter in gegevens)
+            {
+                karakter.Mutaties.ForEach(kv =>
+                {
+                    if (!uniekeMutaties.Any(uv => uv.Naam == kv.Naam && uv.Niveau == kv.Niveau))
+                    {
+                        uniekeMutaties.Add(new MutatiesMetAantal(kv.Naam, kv.Niveau, 1, karakter.KarakterNaam));
+                    }
+                    else
+                    {
+                        uniekeMutaties.Single(x => x.Naam == kv.Naam && x.Niveau == kv.Niveau)
+                            .HoogAantalOp()
+                            .VoegKarakterToe(karakter.KarakterNaam);
+                    }
+                });
+
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Deze mutaties zijn gevonden:");
+
+            var geordend = uniekeMutaties.OrderBy(x => x.Naam).ThenBy(x => x.Niveau).ToList();
+
+            int longestNameLength = 0;
+            geordend.Select(g => g.Naam).ToList().ForEach(n => longestNameLength = n.Length > longestNameLength ? n.Length : longestNameLength);
+
+            geordend.ForEach(v =>
+            {
+                var karakters = new StringBuilder();
+                karakters.AppendJoin(", ", v.Karakters.OrderBy(k => k));
+
+                Console.WriteLine($"{v.Naam} {new string(' ', longestNameLength - v.Naam.Length)}, niveau: {v.Niveau}, aantal:{v.Aantal}. Spelers: {karakters}");
+            });
+        }
+
         private static void DisplayAmbachten(List<ExcelGegevens> gegevens)
         {
             var uniekeAmbachten = new List<Ambacht>();
 
             foreach (var karakter in gegevens)
             {
-                if(!uniekeAmbachten.Any(a => a.Naam == karakter.Ambacht))
+                var huidigeAmbacht = string.IsNullOrWhiteSpace(karakter.Ambacht) ? "<<geen>>" : karakter.Ambacht;
+
+                if(!uniekeAmbachten.Any(a => a.Naam == huidigeAmbacht))
                 {
-                    uniekeAmbachten.Add(new Ambacht(karakter.Ambacht, karakter.KarakterNaam));
+                    uniekeAmbachten.Add(new Ambacht(huidigeAmbacht, karakter.KarakterNaam));
                 }
                 else
                 {
-                    uniekeAmbachten.Single(a => a.Naam == karakter.Ambacht).VerhoogAantal().VoegKarakterToe(karakter.KarakterNaam);
+                    uniekeAmbachten.Single(a => a.Naam == huidigeAmbacht).VerhoogAantal().VoegKarakterToe(karakter.KarakterNaam);
                 }
             }
 

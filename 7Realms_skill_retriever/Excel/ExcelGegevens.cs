@@ -10,6 +10,7 @@ namespace _7Realms_skill_retriever.Excel
         public string KarakterNaam { get; }
         public string Ambacht { get; }
         public List<Vaardigheid> Vaardigheden { get; private set; } = null!;
+        public List<Mutatie> Mutaties { get; private set; } = null!;
 
         public ExcelGegevens(ExcelWorksheet worksheet)
         {
@@ -21,6 +22,8 @@ namespace _7Realms_skill_retriever.Excel
             Ambacht = _sheet.Cells["C5"].Text == "Anders, nl.:" ? _sheet.Cells["D5"].Text : _sheet.Cells["C5"].Text;
 
             VulVaardigheden();
+
+            VulMutaties();
         }
 
         private void VulVaardigheden()
@@ -33,24 +36,24 @@ namespace _7Realms_skill_retriever.Excel
 
             void VulVaardighedenLichaam()
             {
-                var vaardighedenNaam = _sheet.Cells["B26:B34"].Select(x => x.Text).ToList();
-                var vaardighedenNiveau = _sheet.Cells["C26:C34"].Select(x => Int32.Parse(string.IsNullOrEmpty(x.Text) ? "0" : x.Text)).ToList();
+                var vaardighedenNaam = _sheet.Cells["B25:B33"].Select(x => x.Text).ToList();
+                var vaardighedenNiveau = _sheet.Cells["C25:C33"].Select(x => Int32.Parse(string.IsNullOrWhiteSpace(x.Text) ? "0" : x.Text)).ToList();
 
                 VulDeVaardigheden(vaardighedenNaam, vaardighedenNiveau);
             }
 
             void VulVaardighedenZiel()
             {
-                var vaardighedenNaam = _sheet.Cells["G26:G30"].Select(x => x.Text).ToList();
-                var vaardighedenNiveau = _sheet.Cells["H26:H30"].Select(x => Int32.Parse(string.IsNullOrEmpty(x.Text) ? "0" : x.Text)).ToList();
+                var vaardighedenNaam = _sheet.Cells["G25:G29"].Select(x => x.Text).ToList();
+                var vaardighedenNiveau = _sheet.Cells["H25:H29"].Select(x => Int32.Parse(string.IsNullOrWhiteSpace(x.Text) ? "0" : x.Text)).ToList();
 
                 VulDeVaardigheden(vaardighedenNaam, vaardighedenNiveau);
             }
 
             void VulVaardighedenGeest()
             {
-                var vaardighedenNaam = _sheet.Cells["K26:K34"].Select(x => x.Text).ToList();
-                var vaardighedenNiveau = _sheet.Cells["L26:L34"].Select(x => Int32.Parse(string.IsNullOrEmpty(x.Text) ? "0" : x.Text)).ToList();
+                var vaardighedenNaam = _sheet.Cells["K25:K33"].Select(x => x.Text).ToList();
+                var vaardighedenNiveau = _sheet.Cells["L25:L33"].Select(x => Int32.Parse(string.IsNullOrWhiteSpace(x.Text) ? "0" : x.Text)).ToList();
 
                 VulDeVaardigheden(vaardighedenNaam, vaardighedenNiveau);
             }
@@ -59,11 +62,41 @@ namespace _7Realms_skill_retriever.Excel
             {
                 for(int i = 0; i < vaardigheidNamen.Count; i++)
                 {
-                    if (!string.IsNullOrEmpty(vaardigheidNamen[i]))
+                    if (!string.IsNullOrWhiteSpace(vaardigheidNamen[i]))
                     {
                         Vaardigheden.Add(new Vaardigheid(vaardigheidNamen[i]!, niveaus[i]));
                     }
                 }                
+            }
+        }
+
+        private void VulMutaties()
+        {
+            Mutaties = new List<Mutatie>();
+
+            bool isFae = _sheet.Cells["C7"].Single().Text == "Vrije_Fae";
+
+            if (isFae)
+            {
+                VulMutaties("I11:I14","J11:J14");
+            }
+            else
+            {
+                VulMutaties("F16:F19","G16:G19");
+            }
+
+            void VulMutaties(string gebiedNaam, string gebiedNiveau)
+            {
+                var mutatiesNamen = _sheet.Cells[gebiedNaam].Select(x => x.Text).ToList();
+                var mutatiesNiveaus = _sheet.Cells[gebiedNiveau].Select(x => Int32.Parse(string.IsNullOrWhiteSpace(x.Text) ? "0" : x.Text)).ToList();
+
+                for (int i = 0; i < mutatiesNamen.Count; i++)
+                {
+                    if (!string.IsNullOrWhiteSpace(mutatiesNamen[i]))
+                    {
+                        Mutaties.Add(new Mutatie(mutatiesNamen[i], mutatiesNiveaus[i]));
+                    }
+                }
             }
         }
     }

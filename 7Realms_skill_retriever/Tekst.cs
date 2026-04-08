@@ -130,23 +130,29 @@ namespace _7Realms_skill_retriever
 
         private static void DisplayAmbachten(List<ExcelGegevens> gegevens)
         {
-            var uniekeAmbachten = new List<Ambacht>();
+            var uniekeAmbachten = new List<TotaleAmbachten>();
 
             foreach (var karakter in gegevens)
             {
-                var huidigeAmbacht = string.IsNullOrWhiteSpace(karakter.Ambacht) ? "<<geen>>" : karakter.Ambacht;
+                foreach (var ambacht in karakter.Ambachten) 
+                {
+                    var matchingAmbacht = uniekeAmbachten.SingleOrDefault(a => 
+                           a.Naam == ambacht.Naam 
+                        && a.Niveau == ambacht.Niveau);
 
-                if(!uniekeAmbachten.Any(a => a.Naam == huidigeAmbacht))
-                {
-                    uniekeAmbachten.Add(new Ambacht(huidigeAmbacht, karakter.KarakterNaam));
-                }
-                else
-                {
-                    uniekeAmbachten.Single(a => a.Naam == huidigeAmbacht).VerhoogAantal().VoegKarakterToe(karakter.KarakterNaam);
-                }
+
+                    if (matchingAmbacht == null)
+                    {
+                        uniekeAmbachten.Add(new TotaleAmbachten(ambacht.Naam, ambacht.Niveau, karakter.KarakterNaam));
+                    }
+                    else
+                    {
+                        matchingAmbacht.VoegKarakterToe(karakter.KarakterNaam);
+                    }
+                }                
             }
 
-            var geordend = uniekeAmbachten.OrderBy(a => a.Naam).ToList();
+            var geordend = uniekeAmbachten.OrderBy(a => a.Naam).ThenBy(a => a.Niveau).ToList();
 
             int longestNameLength = 0;
             geordend.Select(g => g.Naam).ToList().ForEach(n => longestNameLength = n.Length > longestNameLength ? n.Length : longestNameLength);

@@ -18,9 +18,20 @@ namespace _7Realms_skill_retriever
 
             foreach(var file in inputInfo.GetFiles()) 
             { 
-                if (file.Exists && file.Extension == ".xlsx") 
+                if (file.Exists) 
                 {
-                    gegevens.Add(ExcelSheetReader.ReadDataFromExcelFile(file.FullName));
+                    try
+                    {
+                        gegevens.Add(ExcelSheetReader.ReadDataFromExcelFile(file.FullName));
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine($"Fout opgetreden bij het lezen van het bestand {file.FullName}.");
+                        Console.WriteLine("### Exception ###");
+                        Console.WriteLine(ex.ToString());
+                        Console.WriteLine("### End exception ###");
+                        continue;
+                    }
                 }
                 else
                 {

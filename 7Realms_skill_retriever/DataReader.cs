@@ -4,7 +4,7 @@ namespace _7Realms_skill_retriever
 {
     internal class DataReader
     {
-        private string _inputDirectory;
+        private readonly string _inputDirectory;
         internal DataReader(string inputDirectory)
         {
             _inputDirectory= inputDirectory;

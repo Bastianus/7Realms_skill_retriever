@@ -6,7 +6,7 @@ namespace _7Realms_skill_retriever.Excel
     {
         public static ExcelGegevens ReadDataFromExcelFile(string fullname)
         {
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            ExcelPackage.License.SetNonCommercialPersonal("Bastiaan Pieter Mattern");
 
             var workbook = new ExcelPackage(new FileInfo(fullname));
 

@@ -18,24 +18,17 @@ namespace _7Realms_skill_retriever
 
             foreach(var file in inputInfo.GetFiles()) 
             { 
-                if (file.Exists) 
+                try
                 {
-                    try
-                    {
-                        gegevens.Add(ExcelSheetReader.ReadDataFromExcelFile(file.FullName));
-                    }
-                    catch(Exception ex)
-                    {
-                        Console.WriteLine($"Fout opgetreden bij het lezen van het bestand {file.FullName}.");
-                        Console.WriteLine("### Exception ###");
-                        Console.WriteLine(ex.ToString());
-                        Console.WriteLine("### End exception ###");
-                        continue;
-                    }
+                    gegevens.Add(ExcelSheetReader.ReadDataFromExcelFile(file.FullName));
                 }
-                else
+                catch(Exception ex)
                 {
-                    Console.WriteLine($"Er is een file gevonden, {file.Name}, die vanwege een foutieve extensie wordt overgeslagen.");
+                    Console.WriteLine($"Fout opgetreden bij het lezen van het bestand {file.FullName}.");
+                    Console.WriteLine("### Exception ###");
+                    Console.WriteLine(ex.ToString());
+                    Console.WriteLine("### End exception ###");
+                    continue;
                 }
             }
 
